@@ -22,12 +22,7 @@ they hold a live `Context` or `View` — are mirrored by hand instead; see
 npm install @slipstream/topwise-sdk
 ```
 
-That is the whole install. Effect and the `TextEncoder`/`TextDecoder` polyfill
-Hermes lacks come with it, and the SDK loads the polyfill itself before Effect
-touches it — there is no setup line to remember. `react-native` stays a peer
-dependency, since your app already owns it.
-
-Add `effect` to your own dependencies only if *your* code imports it.
+Add `effect` yourself only if your own code imports it.
 
 Then register the native package in `MainApplication.kt`:
 
@@ -120,9 +115,7 @@ Failures are thrown, not returned, so ordinary `try`/`catch` works — and what
 you catch is the same `TopwiseError`, with its `code`, `module` and `method`
 intact.
 
-Effect is still what the SDK runs on underneath, but it arrives with the
-install and you never import it. See [`example-plain/`](./example-plain) for a
-working app.
+See [`example-plain/`](./example-plain) for a working app.
 
 ### Shapes you will meet
 

@@ -29,9 +29,6 @@ const stop = topwise.checkCard.checkCard(true, true, true, 60, {
 })
 ```
 
-Note this app's `package.json` lists only the SDK: no `effect`, no polyfill.
-They come along with it.
-
 ## What the app does
 
 Bind on start, then a button each for: system info, printer status, printing a
@@ -50,10 +47,6 @@ npm install ../slipstream-topwise-sdk-0.1.0.tgz
 
 npx react-native run-android
 ```
-
-One package, nothing else. Effect and the `TextEncoder`/`TextDecoder` polyfill
-Hermes lacks arrive with the SDK, which loads the polyfill itself — there is
-no setup line in `index.js`.
 
 Autolinking picks up the package's `android/` module; there is no
 `MainApplication.kt` edit. See [`../example/README.md`](../example/README.md)

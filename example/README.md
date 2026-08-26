@@ -40,9 +40,8 @@ npm run --prefix .. build && npm pack --prefix ..     # or install from your reg
 npm install ../slipstream-topwise-sdk-0.1.0.tgz effect
 ```
 
-The SDK brings its own dependencies, including the `TextEncoder`/`TextDecoder`
-polyfill Hermes lacks. `effect` is listed here only because this example's own
-code imports it — see `example-plain` for an app that does not.
+`effect` is here because this example's own code imports it; `example-plain`
+does not need it.
 
 That's it — React Native autolinking finds the package's `android/` module and
 registers `TopwisePackage` for you. There is no `MainApplication.kt` edit, and
