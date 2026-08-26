@@ -26,6 +26,12 @@ export type {
   X509CertificateData,
 } from "./android.js";
 export {
+  makeTopwiseClient,
+  type StreamHandlers,
+  type TopwiseClient,
+  type Unsubscribe,
+} from "./promise.js";
+export {
   TopwiseBridge,
   layer,
   ready,

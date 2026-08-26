@@ -1,6 +1,7 @@
 import type { Layer } from "effect";
 import { NativeEventEmitter, NativeModules } from "react-native";
 import { layer, type CallbackEvent, type NativeBridge, type NativeEvents, type TopwiseBridge } from "./bridge.js";
+import { makeTopwiseClient, type TopwiseClient } from "./promise.js";
 
 const NAME = "TopwiseBridge";
 const EVENT = "TopwiseCallback";
@@ -67,3 +68,27 @@ export const TopwiseBridgeLive: Layer.Layer<TopwiseBridge> = layer(
     },
   }))(),
 );
+
+/**
+ * A promise-based client over the same bridge, for apps that do not use
+ * Effect. Every call returns a `Promise`; every device callback becomes a
+ * subscription with an unsubscribe function.
+ *
+ * ```ts
+ * const topwise = createTopwise()
+ * await topwise.ready()
+ *
+ * const state = await topwise.printer.getPrinterState()
+ *
+ * const stop = topwise.checkCard.checkCard(true, true, true, 60, {
+ *   onEvent: (e) => console.log(e._tag, e),
+ * })
+ * // later: stop()
+ * ```
+ *
+ * Create it once for the lifetime of the app - it owns the runtime and the
+ * registry of live listeners.
+ */
+export const createTopwise = (): TopwiseClient => makeTopwiseClient(TopwiseBridgeLive);
+
+export type { TopwiseClient, StreamHandlers, Unsubscribe } from "./promise.js";
