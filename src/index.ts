@@ -58,10 +58,8 @@ export * from "./generated/modules.js";
 /** Data carriers (`TrackData`, `EmvCapk`, `PrintItemObj`, ...). */
 export type * from "./generated/types.js";
 
-// Namespaced re-exports are written as import-then-export rather than
-// `export * as NS from`: that syntax needs
-// @babel/plugin-transform-export-namespace-from, which React Native's Babel
-// preset does not apply to node_modules, and Metro fails the bundle on it.
+// `export * as NS from` needs a Babel plugin RN does not apply to
+// node_modules, so these are import-then-export.
 import * as Events from "./generated/listeners.js";
 import * as Enums from "./generated/enums.js";
 import * as Constants from "./generated/constants.js";

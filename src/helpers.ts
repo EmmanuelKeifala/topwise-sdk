@@ -5,24 +5,9 @@ import type { TopwiseError } from "./errors.js";
 import type { MacParam, PinParam } from "./generated/types.js";
 
 /**
- * Behaviour on vendor value classes that the generated field mirrors cannot
- * carry, because the work happens inside Java.
- *
- * `pinpad(n).getPin` and `getMac` take an `android.os.Bundle` whose keys are
- * defined only inside `PinParam.getParam()` / `MacParam.getParam()`. Rather
- * than hard-code key names scraped out of a method body, the parameters cross
- * as data, Java rebuilds them, and its Bundle comes back:
- *
- * ```ts
- * const bundle = yield* helpers.pinParamToBundle({
- *   keyIndex: 1, pinType: 0, keyType: 1, panBlock, timeOut: 60,
- *   keyMinLength: 4, keyMaxLength: 12,
- * })
- * yield* pinpad(0).getPin(bundle).pipe(
- *   Stream.takeUntil((e) => e._tag !== "onInput"),
- *   Stream.runHead,
- * )
- * ```
+ * Java-side behaviour the generated field mirrors cannot carry. The Bundle
+ * keys `getPin`/`getMac` expect live inside `getParam()`, so the params cross
+ * as data and Java builds the Bundle.
  */
 const M = "helpers";
 

@@ -1,20 +1,11 @@
 # @slipstream/topwise-sdk
 
-Effect-TS bindings for the Topwise T1/T3/T6 Android POS SDK, for React Native
-apps running on the terminal.
+Effect-TS bindings for the Topwise T1/T3/T6 Android POS SDK, on React Native.
+Usable without Effect too — see [Without Effect](#without-effect).
 
-The vendor SDK is ~750 AIDL methods across 36 device modules. Rather than
-hand-writing a React Native method per AIDL method, this package **generates**
-its whole surface from the vendor jar (via `javap`) and the vendor javadoc
-(for real parameter names and docs). One reflective Kotlin module does the
-dispatch; only the parts reflection genuinely cannot do — resolving
-`DeviceServiceManager` getters, and subclassing the abstract binder `Stub`
-classes — are generated Kotlin.
-
-Coverage: **760 of 760** methods across 39 modules, plus every data class in
-the jar mirrored as a TypeScript type. The three classes that cannot be data —
-they hold a live `Context` or `View` — are mirrored by hand instead; see
-[CODEGEN_REPORT.md](./CODEGEN_REPORT.md).
+**760 of 760** AIDL methods across 39 device modules, generated from the vendor
+jar and its javadoc. See [CODEGEN_REPORT.md](./CODEGEN_REPORT.md) for coverage
+detail and [CONTRIBUTING.md](./CONTRIBUTING.md) for how generation works.
 
 ## Install
 
@@ -119,20 +110,15 @@ See [`example-plain/`](./example-plain) for a working app.
 
 ### Shapes you will meet
 
-Every device method returns an `Effect` in one of three shapes, decided by
-what the underlying AIDL method does:
+The shape a method returns follows what the underlying AIDL method does:
 
-| AIDL method | TypeScript |
-| --- | --- |
-| plain call | `Effect<A, TopwiseError, TopwiseBridge>` |
-| takes a listener, returns `void` | `Stream<Event, TopwiseError, TopwiseBridge>` |
-| takes a listener, returns a status | `Effect<{ result, events }, …, … \| Scope>` |
-| takes a kernel callback (EMV L2) | `Effect<A, …, … \| Scope>`, you pass handlers |
-| hands back another interface | `Effect<XRef>`, call it via `xAt(ref)` |
-
-With `createTopwise()` those become, in order: a promise; a subscription taking
-`{ onEvent }` and returning `unsubscribe`; a promise of `{ result, events }`
-where `events` goes to `topwise.subscribe(...)`; a promise; and a promise.
+| AIDL method | Effect | `createTopwise()` |
+| --- | --- | --- |
+| plain call | `Effect<A>` | `Promise<A>` |
+| listener, returns `void` | `Stream<Event>` | `(…, { onEvent }) => unsubscribe` |
+| listener, returns a status | `Effect<{ result, events }>` | `Promise<{ result, events }>` |
+| kernel callback (EMV L2) | `Effect<A>`, you pass handlers | same, as a promise |
+| hands back another interface | `Effect<XRef>`, then `xAt(ref)` | same, as a promise |
 
 Listener streams stay open until their scope closes, because the vendor never
 marks a callback as terminal. Close them yourself:

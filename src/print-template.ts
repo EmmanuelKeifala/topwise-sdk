@@ -6,16 +6,11 @@ import type { TopwiseError } from "./errors.js";
 import type { ImageUnit, TextUnit } from "./generated/types.js";
 
 /**
- * `com.topwise.cloudpos.aidl.printer.PrintTemplate` - the receipt layout
- * builder. Rows go in, a bitmap comes out, and that bitmap is what
- * {@link printer.printBmp} puts on paper.
+ * `PrintTemplate` - the receipt layout builder. Rows in, bitmap out, and that
+ * bitmap goes to `printer.printBmp`.
  *
- * Hand-written rather than generated, for two reasons. The Java class holds a
- * `Context` and a `LinearLayout`, so it is a native-side object rather than
- * data. And its six `add` overloads differ only by argument *type* -
- * `add(TextUnit)` and `add(ImageUnit)` are both arity one - which reflective
- * dispatch cannot tell apart once the arguments are JSON. Each overload is
- * therefore given a distinct name:
+ * Its six `add` overloads differ only by argument type, which reflective
+ * dispatch cannot resolve once the arguments are JSON, so each gets a name:
  *
  * | Java | here |
  * | --- | --- |

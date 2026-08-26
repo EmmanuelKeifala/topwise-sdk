@@ -1,9 +1,6 @@
 /**
- * Hand-written mappings for Android and JDK types that appear in the Topwise
- * AIDL surface.
- *
- * These are stable platform shapes, not vendor types, so they are written once
- * here rather than generated. Each has a matching rule in `TopwiseCodec.kt`.
+ * Android and JDK types appearing in the AIDL surface. Each has a matching
+ * rule in `TopwiseCodec.kt`.
  */
 
 /** `android.content.ContentValues` - a flat, typed key/value bag. */
@@ -23,10 +20,7 @@ export interface Rect {
   readonly bottom: number;
 }
 
-/**
- * `android.graphics.Typeface`. A Typeface is a loaded font, so it crosses as a
- * request to load one: a built-in family, a file on disk, or an app asset.
- */
+/** `android.graphics.Typeface`, as a request to load one rather than the font. */
 export interface TypefaceSpec {
   /** e.g. `"monospace"`, `"sans-serif"`. Ignored when `path`/`asset` is set. */
   readonly family?: string;

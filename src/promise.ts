@@ -1,14 +1,6 @@
 /**
- * A promise-based facade over the Effect API.
- *
- * Every binding in this SDK returns an `Effect` or a `Stream`. That is the
- * right shape if you already run Effect, and an obstacle if you don't. This
- * turns the whole surface into promises and callbacks without asking the
- * caller to learn anything: `Effect` becomes `Promise`, and `Stream` becomes a
- * subscription that returns its own unsubscribe function.
- *
- * Nothing is lost by using it — it is the same bridge underneath — but errors
- * arrive as thrown `TopwiseError`s rather than typed failure channels.
+ * Promise facade over the Effect API: `Effect` becomes `Promise`, `Stream`
+ * becomes a subscription, and failures are thrown rather than typed.
  */
 import { Cause, Effect, Exit, Fiber, ManagedRuntime, Stream } from "effect";
 import type { Layer } from "effect";
