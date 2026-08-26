@@ -1,0 +1,21 @@
+{
+  "name": "topwise-plain",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@slipstream/topwise-sdk": "file:../slipstream-topwise-sdk-0.1.0.tgz",
+    "effect": "^3.22.0",
+    "react": "18.3.1",
+    "react-native": "0.76.5",
+    "text-encoding-polyfill": "^0.6.7"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.7.0"
+  }
+}
