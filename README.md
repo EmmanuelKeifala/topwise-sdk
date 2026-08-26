@@ -77,6 +77,54 @@ Effect.runPromise(
 )
 ```
 
+## Without Effect
+
+Every binding returns an `Effect`, which is the right shape if you already run
+Effect and an obstacle if you don't. `createTopwise()` gives you the same
+bridge as promises and callbacks — no Effect in your code at all:
+
+```ts
+import { createTopwise } from "@slipstream/topwise-sdk/react-native"
+
+const topwise = createTopwise()   // once, for the app's lifetime
+
+await topwise.ready()
+const state = await topwise.printer.getPrinterState()
+
+// Listener methods take a handlers object and return an unsubscribe function.
+const stop = topwise.checkCard.checkCard(true, true, true, 60, {
+  onEvent: (event) => {
+    if (event._tag === "onFindMagCard") console.log(event.data?.cardno)
+  },
+  onError: (error) => console.error(error),
+})
+// later
+stop()
+```
+
+Printing reads the same way:
+
+```ts
+await topwise.printTemplate.init()
+
+const bitmap = await topwise.printTemplate.session(async () => {
+  await topwise.printTemplate.addText({ text: "ACME", fontSize: 30, align: "CENTER" })
+  await topwise.printTemplate.addColumns2(3, { text: "Total" }, 1, { text: "4.50", align: "RIGHT" })
+  return topwise.printTemplate.getPrintBitmap()
+})
+
+const stop = topwise.printer.printBmp(0, 384, 0, bitmap, {
+  onEvent: (e) => { if (e._tag === "onPrintFinish") stop() },
+})
+```
+
+Failures are thrown, not returned, so ordinary `try`/`catch` works — and what
+you catch is the same `TopwiseError`, with its `code`, `module` and `method`
+intact.
+
+`effect` still has to be installed (it is what the SDK runs on), you just never
+import it. See [`example-plain/`](./example-plain) for a working app.
+
 ### Shapes you will meet
 
 Every device method returns an `Effect` in one of three shapes, decided by
@@ -89,6 +137,10 @@ what the underlying AIDL method does:
 | takes a listener, returns a status | `Effect<{ result, events }, …, … \| Scope>` |
 | takes a kernel callback (EMV L2) | `Effect<A, …, … \| Scope>`, you pass handlers |
 | hands back another interface | `Effect<XRef>`, call it via `xAt(ref)` |
+
+With `createTopwise()` those become, in order: a promise; a subscription taking
+`{ onEvent }` and returning `unsubscribe`; a promise of `{ result, events }`
+where `events` goes to `topwise.subscribe(...)`; a promise; and a promise.
 
 Listener streams stay open until their scope closes, because the vendor never
 marks a callback as terminal. Close them yourself:
@@ -287,6 +339,7 @@ exactly what the vendor changed.
 | `src/bytes.ts` | `BytesUtil` / `Tlv` / `TlvList`, pure TS |
 | `src/print-template.ts` | receipt builder, hand-written |
 | `src/helpers.ts` | Java-side behaviour (`getParam()`), hand-written |
+| `src/promise.ts` | promise facade for non-Effect callers |
 | `src/generated/` | do not edit |
 | `android/…/TopwiseBridgeModule.kt` | reflective dispatch, hand-written |
 | `android/…/TopwisePrintTemplate.kt` | receipt builder executor, hand-written |
