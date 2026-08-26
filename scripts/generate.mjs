@@ -689,12 +689,16 @@ function emitModules() {
   return out.join("\n");
 }
 
+/** Every binding emitted, in the form the docs need. */
+const surface = [];
+
 function emitMethod(mod, m) {
   const idxExpr = mod.indexed ? "index" : "-1";
   const modExpr = mod.modExpr;
   const docLinesExtra = [];
 
   const params = [];
+  const paramInfo = [];
   const argExprs = [];
   const outParams = [];
   let listenerFqn = null;
@@ -723,6 +727,7 @@ function emitMethod(mod, m) {
     const pn = safeParam(m.paramNames?.[i], i, jt);
     if (OUT_HOLDERS.has(rawType(jt))) outParams.push({ index: i, name: pn, ty: tsType(jt, "out") });
     params.push(`${pn}: ${qualifyRefs(ty)}`);
+    paramInfo.push({ name: pn, type: qualifyRefs(ty), java: jt, doc: escapeDoc(m.paramDocs?.[i] ?? "") });
     argExprs.push(pn);
   }
 
@@ -758,6 +763,19 @@ function emitMethod(mod, m) {
   const argList = `[${argExprs.join(", ")}]`;
   const sig = params.join(", ");
 
+  const record = (extra) =>
+    surface.push({
+      module: mod.name,
+      iface: mod.iface,
+      indexed: Boolean(mod.indexed),
+      method: m.name,
+      params: paramInfo,
+      doc: escapeDoc(m.doc ?? ""),
+      returnDoc: escapeDoc(m.returnDoc ?? ""),
+      deprecated: Boolean(m.deprecated),
+      ...extra,
+    });
+
   if (listenerFqn && respondIfaces.has(listenerFqn)) {
     const shape = `L.${listenerShapeName(listenerFqn)}`;
     const handlers = `L.${listenerHandlersName(listenerFqn)}`;
@@ -767,6 +785,7 @@ function emitMethod(mod, m) {
       "@remarks The kernel blocks waiting for each handler's value; the",
       "registration stays live until the surrounding scope closes.",
     );
+    record({ kind: "handlers", ret, handlers: listenerHandlersName(listenerFqn), listener: listenerFqn });
     return jsdoc(docLines) +
       `  ${m.name}: (${sig2}): Effect.Effect<${ret}, TopwiseError, TopwiseBridge | Scope> =>\n` +
       `    callWithHandlers(${modExpr}, ${idxExpr}, ${JSON.stringify(m.name)}, ${argList}, ${shape}, handlers as never, ${replies}, options),`;
@@ -780,11 +799,13 @@ function emitMethod(mod, m) {
         "@remarks Emits until the surrounding scope closes; combine with",
         "`Stream.takeUntil` on the terminal event you care about.",
       );
+      record({ kind: "stream", ret: "void", event: listenerEventName(listenerFqn), listener: listenerFqn });
       return jsdoc(docLines) +
         `  ${m.name}: (${sig}): Stream.Stream<${ev}, TopwiseError, TopwiseBridge> =>\n` +
         `    callStream(${modExpr}, ${idxExpr}, ${JSON.stringify(m.name)}, ${argList}, ${shape}),`;
     }
     docLines.push("@remarks Returns the call's synchronous result alongside the callback stream.");
+    record({ kind: "events", ret, event: listenerEventName(listenerFqn), listener: listenerFqn });
     return jsdoc(docLines) +
       `  ${m.name}: (${sig}): Effect.Effect<{ readonly result: ${ret}; readonly events: Stream.Stream<${ev}, TopwiseError> }, TopwiseError, TopwiseBridge | Scope> =>\n` +
       `    callWithEvents(${modExpr}, ${idxExpr}, ${JSON.stringify(m.name)}, ${argList}, ${shape}),`;
@@ -797,11 +818,13 @@ function emitMethod(mod, m) {
       `@returns \`result\` is the status code; \`out\` carries ${outParams.map((p) => `\`${p.name}\``).join(", ")},`,
       "which the Java side fills in by mutating the argument you pass.",
     );
+    record({ kind: "out", ret, out: outParams.map((o) => ({ name: o.name, type: qualifyRefs(o.ty) })) });
     return jsdoc(docLines) +
       `  ${m.name}: (${sig}): Effect.Effect<{ readonly result: ${ret}; readonly out: ${outType} }, TopwiseError, TopwiseBridge> =>\n` +
       `    callOut(${modExpr}, ${idxExpr}, ${JSON.stringify(m.name)}, ${argList}, ${names}),`;
   }
 
+  record({ kind: "plain", ret });
   return jsdoc(docLines) +
     `  ${m.name}: (${sig}): Effect.Effect<${ret}, TopwiseError, TopwiseBridge> =>\n` +
     `    call(${modExpr}, ${idxExpr}, ${JSON.stringify(m.name)}, ${argList}),`;
@@ -912,6 +935,234 @@ function kotlinType(java) {
   return `${raw}?`;
 }
 
+
+// ---------------------------------------------------------------- docs output
+
+const DOCS_DIR = join(ROOT, "docs");
+/** `|` breaks markdown tables. */
+const cell = (t) => String(t).replace(/\|/g, "\\|");
+/** Strip the module aliases codegen uses internally; callers import bare names. */
+const plain = (t) => String(t).replace(/\b(?:Types|Events|E|A|B|L)\./g, "");
+const anchor = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/** How a binding is called, in both styles. */
+function signatures(entry) {
+  const call = entry.indexed ? `${entry.module}(index)` : entry.module;
+  const args = entry.params.map((p) => `${p.name}: ${plain(p.type)}`).join(", ");
+  const withArgs = (extra) => [args, extra].filter(Boolean).join(", ");
+
+  switch (entry.kind) {
+    case "stream":
+      return [
+        `${call}.${entry.method}(${args})`,
+        `  : Stream<${entry.event}, TopwiseError, TopwiseBridge>`,
+        ``,
+        `// promise client`,
+        `topwise.${call}.${entry.method}(${withArgs("{ onEvent }")}): Unsubscribe`,
+      ].join("\n");
+    case "events":
+      return [
+        `${call}.${entry.method}(${args})`,
+        `  : Effect<{ result: ${plain(entry.ret)}; events: Stream<${entry.event}> }, TopwiseError, TopwiseBridge | Scope>`,
+        ``,
+        `// promise client`,
+        `await topwise.${call}.${entry.method}(${args})`,
+        `  // -> { result, events }  - pass events to topwise.subscribe(...)`,
+      ].join("\n");
+    case "handlers":
+      return [
+        `${call}.${entry.method}(${withArgs(`handlers: ${entry.handlers}, options?: CallbackOptions`)})`,
+        `  : Effect<${plain(entry.ret)}, TopwiseError, TopwiseBridge | Scope>`,
+        ``,
+        `// promise client`,
+        `await topwise.${call}.${entry.method}(${withArgs("handlers, options?")}): ${plain(entry.ret)}`,
+      ].join("\n");
+    case "out": {
+      const out = entry.out.map((o) => `${o.name}: ${plain(o.type)}`).join("; ");
+      return [
+        `${call}.${entry.method}(${args})`,
+        `  : Effect<{ result: ${plain(entry.ret)}; out: { ${out} } }, TopwiseError, TopwiseBridge>`,
+        ``,
+        `// promise client`,
+        `await topwise.${call}.${entry.method}(${args})  // -> { result, out }`,
+      ].join("\n");
+    }
+    default:
+      return [
+        `${call}.${entry.method}(${args}): Effect<${plain(entry.ret)}, TopwiseError, TopwiseBridge>`,
+        ``,
+        `// promise client`,
+        `await topwise.${call}.${entry.method}(${args}): ${plain(entry.ret)}`,
+      ].join("\n");
+  }
+}
+
+function docsForModule(name, entries) {
+  const iface = entries[0].iface;
+  const indexed = entries[0].indexed;
+  const out = [
+    `# ${name}`, "",
+    `\`${iface}\``, "",
+    `${entries.length} method${entries.length === 1 ? "" : "s"}.`, "",
+  ];
+  if (indexed) {
+    out.push(
+      `Takes a slot index: \`${name}(0)\`. Slots are 0-based and model-specific;`,
+      `an absent slot fails with \`MODULE_UNAVAILABLE\`.`, "",
+    );
+  }
+  out.push(
+    "Every method here can fail with any of the transport codes in",
+    "[errors.md](../errors.md). Method-specific meanings are noted below.", "",
+    "## Methods", "",
+    entries.map((e) => `[\`${e.method}\`](#${anchor(e.method)})`).join(" · "), "",
+  );
+
+  for (const e of entries) {
+    out.push("---", "", `### \`${e.method}\``, "");
+    if (e.deprecated) out.push("> **Deprecated** by the vendor.", "");
+    if (e.doc && !/^deprecated\.?$/i.test(e.doc)) out.push(e.doc, "");
+    out.push("```ts", signatures(e), "```", "");
+
+    if (e.params.length > 0) {
+      const documented = e.params.some((p) => p.doc);
+      out.push(
+        documented ? "| Parameter | Type | Notes |" : "| Parameter | Type |",
+        documented ? "| --- | --- | --- |" : "| --- | --- |",
+      );
+      for (const p of e.params) {
+        const base = `| \`${p.name}\` | \`${cell(plain(p.type))}\` |`;
+        out.push(documented ? `${base} ${cell(p.doc)} |` : base);
+      }
+      out.push("");
+    }
+    if (e.returnDoc) out.push(`**Returns** — ${e.returnDoc}`, "");
+    if (e.kind === "stream" || e.kind === "events") {
+      out.push(`**Events** — [\`${e.event}\`](../events.md#${anchor(e.event)}).`, "");
+    }
+    if (e.kind === "handlers") {
+      out.push(
+        `**Handlers** — [\`${e.handlers}\`](../events.md#${anchor(e.handlers)}). The kernel`,
+        "blocks on the binder thread until each handler answers, so every method",
+        "must be implemented and none may fail.", "",
+      );
+    }
+    if (e.kind === "out") {
+      out.push(
+        `**Out-parameters** — Java writes the payload into ${e.out.map((o) => `\`${o.name}\``).join(", ")}`,
+        "rather than returning it; read it from `out`.", "",
+      );
+    }
+  }
+  return out.join("\n");
+}
+
+function emitDocs() {
+  mkdirSync(join(DOCS_DIR, "modules"), { recursive: true });
+
+  const byModule = new Map();
+  for (const e of surface) {
+    if (!byModule.has(e.module)) byModule.set(e.module, []);
+    byModule.get(e.module).push(e);
+  }
+  const names = [...byModule.keys()].sort();
+  for (const name of names) {
+    writeFileSync(join(DOCS_DIR, "modules", `${name}.md`), docsForModule(name, byModule.get(name)) + "\n");
+  }
+
+  // ---- events ----
+  const ev = [`# Events`, "", "Callbacks delivered by the device, one union per AIDL listener.", ""];
+  for (const fqn of [...emittedListeners].sort()) {
+    const variants = listenerVariants.get(fqn);
+    ev.push(`## ${listenerEventName(fqn)}`, "", `\`${fqn}\``, "");
+    ev.push("| `_tag` | Fields |", "| --- | --- |");
+    for (const v of variants) {
+      const fields = v.fields.map((f) => `\`${f.name}: ${cell(plain(qualifyRefs(f.ty)))}\``).join("<br>") || "—";
+      ev.push(`| \`${v.name}\` | ${fields} |`);
+    }
+    ev.push("");
+    if (respondIfaces.has(fqn)) {
+      ev.push(
+        `### ${listenerHandlersName(fqn)}`, "",
+        "The kernel blocks waiting for each of these. Every method must be",
+        "implemented and return a number; none may fail.", "",
+      );
+    }
+  }
+  writeFileSync(join(DOCS_DIR, "events.md"), ev.join("\n") + "\n");
+
+  // ---- data types ----
+  const ty = [`# Data types`, "", `${emittedData.size} carriers mirrored from the jar. Fields are nullable because Java's are.`, ""];
+  for (const fqn of [...emittedData].sort()) {
+    const props = dataProps.get(fqn) ?? [];
+    if (props.length === 0) continue;
+    ty.push(`## ${tsName(fqn)}`, "", `\`${fqn}\``, "");
+    ty.push("| Field | Type |", "| --- | --- |");
+    for (const p of props) ty.push(`| \`${p.name}\` | \`${cell(plain(qualifyRefs(p.ty)))} \\| null\` |`);
+    ty.push("");
+  }
+  writeFileSync(join(DOCS_DIR, "types.md"), ty.join("\n") + "\n");
+
+  // ---- enums ----
+  const en = [`# Enums`, "", "Java enums as string-literal unions; pass the name.", ""];
+  for (const fqn of [...enumTypes].sort()) {
+    const values = T[fqn].fields.filter((f) => f.type === fqn && f.mods.includes("static")).map((f) => f.name);
+    if (values.length === 0) continue;
+    en.push(`## ${tsName(fqn)}`, "", `\`${fqn}\``, "", values.map((v) => `\`"${v}"\``).join(" · "), "");
+  }
+  writeFileSync(join(DOCS_DIR, "enums.md"), en.join("\n") + "\n");
+
+  // ---- constants ----
+  const co = [
+    `# Constants`, "",
+    "Vendor constant tables. Most device calls report business failure in-band",
+    "as a non-zero `int`; check the return against the matching table here.", "",
+  ];
+  for (const fqn of [...constantTypes].sort()) {
+    const fields = constantFields(T[fqn]);
+    if (fields.length === 0) continue;
+    co.push(`## ${tsName(fqn)}`, "", `\`${fqn}\``, "");
+    co.push("| Name | Value |", "| --- | --- |");
+    for (const f of fields) co.push(`| \`${f.name}\` | \`${cell(JSON.stringify(f.value))}\` |`);
+    co.push("");
+  }
+  writeFileSync(join(DOCS_DIR, "constants.md"), co.join("\n") + "\n");
+
+  // ---- index ----
+  const total = surface.length;
+  const idx = [
+    `# API reference`, "",
+    `${total} methods across ${names.length} modules, generated from \`${api.jar}\`.`,
+    "Re-run \`npm run codegen\` after a vendor jar drop and these regenerate.", "",
+    "## Guides", "",
+    "- [Getting started](./getting-started.md)",
+    "- [Printing receipts](./printing.md)",
+    "- [PIN entry and keys](./pin-and-keys.md)",
+    "- [Concepts](./concepts.md) — handles, Android types, bytes and TLV",
+    "- [Errors](./errors.md)",
+    "- [Troubleshooting](./troubleshooting.md)", "",
+    "## Reference", "",
+    "- [Events](./events.md) — listener callback unions",
+    "- [Data types](./types.md)",
+    "- [Enums](./enums.md)",
+    "- [Constants](./constants.md) — including the `AidlErrorCode*` tables", "",
+    "## Modules", "",
+    "One page per module, generated from the jar. `printTemplate` and `helpers`",
+    "are hand-written and documented in the guides above.", "",
+    "| Module | Methods | AIDL interface |",
+    "| --- | --- | --- |",
+    ...names.map((n) => {
+      const es = byModule.get(n);
+      const label = es[0].indexed ? `${n}(index)` : n;
+      return `| [\`${label}\`](./modules/${n}.md) | ${es.length} | \`${es[0].iface.split(".").pop()}\` |`;
+    }),
+    "",
+  ];
+  writeFileSync(join(DOCS_DIR, "README.md"), idx.join("\n") + "\n");
+
+  return { modules: names.length, methods: total };
+}
+
 // ------------------------------------------------------------------ assembly
 
 const BANNER = "GENERATED by scripts/generate.mjs from api.json. Do not edit by hand.";
@@ -930,6 +1181,8 @@ function main() {
   writeFileSync(join(TS_DIR, "listeners.ts"), emitListeners());
   writeFileSync(join(TS_DIR, "modules.ts"), emitModules());
   writeFileSync(join(KOTLIN_DIR, "TopwiseGenerated.kt"), emitKotlin());
+
+  const docs = emitDocs();
 
   const exposedMethods = [...exposedIfaces].reduce((n, i) => n + exposedMethodsOf(i).length, 0);
   const skippedMethods = unique(report.skippedMethods);
@@ -988,6 +1241,7 @@ function main() {
   console.log(`data      : ${emittedData.size}`);
   console.log(`constants : ${constantTypes.size}`);
   console.log(`skipped   : ${unique(report.skippedMethods).length} methods, ${unique(report.skippedFields).length} fields`);
+  console.log(`docs      : ${docs.methods} methods across ${docs.modules} module pages`);
 }
 
 const unique = (a) => [...new Set(a)].sort();

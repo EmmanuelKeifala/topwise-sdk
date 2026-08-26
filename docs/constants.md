@@ -1,0 +1,1061 @@
+# Constants
+
+Vendor constant tables. Most device calls report business failure in-band
+as a non-zero `int`; check the return against the matching table here.
+
+## BuildConfig
+
+`com.android.topwise.toplibrary.BuildConfig`
+
+| Name | Value |
+| --- | --- |
+| `DEBUG` | `false` |
+| `APPLICATION_ID` | `"com.android.topwise.toplibrary"` |
+| `BUILD_TYPE` | `"release"` |
+| `FLAVOR` | `""` |
+| `VERSION_CODE` | `1` |
+| `VERSION_NAME` | `"1.0"` |
+
+## ExpandFunctionConstant
+
+`com.topwise.cloudpos.ExpandFunctionConstant`
+
+| Name | Value |
+| --- | --- |
+| `FUNCTION_LIST` | `"getFunctionList"` |
+
+## ReturnCodeCLSS
+
+`com.topwise.cloudpos.aidl.emv.level2.ReturnCodeCLSS`
+
+| Name | Value |
+| --- | --- |
+| `EMV_OK` | `0` |
+| `CLSS_OK` | `0` |
+| `ICC_RESET_ERR` | `-1` |
+| `ICC_CMD_ERR` | `-2` |
+| `ICC_BLOCK` | `-3` |
+| `EMV_RSP_ERR` | `-4` |
+| `EMV_APP_BLOCK` | `-5` |
+| `EMV_USER_CANCEL` | `-7` |
+| `EMV_TIME_OUT` | `-8` |
+| `EMV_DATA_ERR` | `-9` |
+| `EMV_NOT_ACCEPT` | `-10` |
+| `EMV_DENIAL` | `-11` |
+| `EMV_KEY_EXP` | `-12` |
+| `EMV_NO_PINPAD` | `-13` |
+| `EMV_NO_PASSWORD` | `-14` |
+| `EMV_SUM_ERR` | `-15` |
+| `EMV_NOT_FOUND` | `-16` |
+| `EMV_NO_DATA` | `-17` |
+| `EMV_OVERFLOW` | `-18` |
+| `NO_TRANS_LOG` | `-19` |
+| `RECORD_NOTEXIST` | `-20` |
+| `LOGITEM_NOTEXIST` | `-21` |
+| `ICC_RSP_6985` | `-22` |
+| `EMV_FILE_ERR` | `-24` |
+| `EMV_PARAM_ERR` | `-30` |
+| `CLSS_NO_APP` | `-6` |
+| `CLSS_USE_CONTACT` | `-23` |
+| `CLSS_FILE_ERR` | `-24` |
+| `CLSS_TERMINATE` | `-25` |
+| `CLSS_FAILED` | `-26` |
+| `CLSS_DECLINE` | `-27` |
+| `CLSS_TRY_ANOTHER_CARD` | `-28` |
+| `CLSS_PARAM_ERR` | `-30` |
+| `CLSS_RESELECT_APP` | `-35` |
+| `CLSS_CARD_EXPIRED` | `-36` |
+| `CLSS_NO_APP_PPSE_ERR` | `-37` |
+| `CLSS_USE_VSDC` | `-38` |
+| `CLSS_CVMDECLINE` | `-39` |
+| `CLSS_REFER_CONSUMER_DEVICE` | `-40` |
+| `CLSS_LAST_CMD_ERR` | `-41` |
+| `CLSS_API_ORDER_ERR` | `-42` |
+| `CLSS_TORN_CARDNUM_ERR` | `-43` |
+| `CLSS_TRON_AID_ERR` | `-44` |
+| `CLSS_TRON_AMT_ERR` | `-45` |
+| `CLSS_CARD_EXPIRED_REQ_ONLINE` | `-46` |
+| `CLSS_FILE_NOT_FOUND` | `-47` |
+| `CLSS_TRY_AGAIN` | `-48` |
+| `CLSS_TORN_RECOVER` | `-49` |
+| `CLSS_TRON_NULL` | `-50` |
+| `CLSS_DEVICE_NOT_AUTH` | `-51` |
+| `CLSS_PAYMENT_NOT_ACCEPT` | `-200` |
+| `CLSS_INSERTED_ICCARD` | `-301` |
+| `CLSS_SWIPED_MAGCARD` | `-302` |
+| `CLSS_MORE_CARD` | `-303` |
+
+## ReturnCodeEMV
+
+`com.topwise.cloudpos.aidl.emv.level2.ReturnCodeEMV`
+
+| Name | Value |
+| --- | --- |
+| `EMV_OK` | `0` |
+| `EMV_APPROVED` | `1` |
+| `EMV_FORCE_APPROVED` | `2` |
+| `EMV_DECLINED` | `3` |
+| `EMV_NOT_ALLOWED` | `5` |
+| `EMV_NO_ACCEPTED` | `6` |
+| `EMV_TERMINATED` | `7` |
+| `EMV_CARD_BLOCKED` | `8` |
+| `EMV_APP_BLOCKED` | `9` |
+| `EMV_NO_APP` | `10` |
+| `EMV_FALLBACK` | `11` |
+| `EMV_CAPK_EXPIRED` | `12` |
+| `EMV_CAPK_CHECKSUM_ERROR` | `13` |
+| `EMV_AID_DUPLICATE` | `14` |
+| `EMV_CERTIFICATE_RECOVER_FAILED` | `15` |
+| `EMV_DATA_AUTH_FAILED` | `16` |
+| `EMV_UN_RECOGNIZED_TAG` | `17` |
+| `EMV_DATA_NOT_EXISTS` | `18` |
+| `EMV_DATA_LENGTH_ERROR` | `19` |
+| `EMV_INVALID_TLV` | `20` |
+| `EMV_INVALID_RESPONSE` | `21` |
+| `EMV_DATA_DUPLICATE` | `22` |
+| `EMV_MEMORY_NOT_ENOUGH` | `23` |
+| `EMV_MEMORY_OVERFLOW` | `24` |
+| `EMV_PARAMETER_ERROR` | `25` |
+| `EMV_ICC_ERROR` | `26` |
+| `EMV_NO_MORE_DATA` | `27` |
+| `EMV_CAPK_NO_FOUND` | `28` |
+| `EMV_AID_NO_FOUND` | `29` |
+| `EMV_FORMAT_ERROR` | `30` |
+| `EMV_ONLINE_REQUEST` | `31` |
+| `EMV_SELECT_NEXT_AID` | `32` |
+| `EMV_TRY_AGAIN` | `33` |
+| `EMV_SEE_PHONE` | `34` |
+| `EMV_TRY_OTHER_INTERFACE` | `35` |
+| `EMV_ICC_ERR_LAST_RECORD` | `36` |
+| `EMV_OTHER_ERROR` | `255` |
+| `QPBOC_AMOUNT_BIG_THAN_CL_LIMIT` | `301` |
+| `QPBOC_OTHER_INTERFACE` | `302` |
+| `QPBOC_NEED_RETRY` | `303` |
+| `QPBOC_IN_EXCEPTION_FILE` | `304` |
+| `QPBOC_APP_EXPIRED` | `305` |
+| `QPBOC_CANT_GO_ONLINE_DECLINE` | `306` |
+| `QPBOC_TERMINATED_CONTACT` | `307` |
+| `QPBOC_TERMINATED_SWIPE` | `308` |
+| `QPBOC_APP_EXPIRED_APPROVED` | `309` |
+| `QPBOC_APP_EXPIRED_OFFLINE_DECLINED` | `310` |
+| `QPBOC_APP_EXPIRED_ONLINE_DECLINED` | `311` |
+| `QPBOC_OFFLINE_APPROVED` | `312` |
+| `QPBOC_ONLINE_APPROVED` | `313` |
+| `QPBOC_OFFLINE_DECLINED` | `314` |
+| `QPBOC_ONLINE_DECLINED` | `315` |
+| `QPBOC_GPO_SW_6986` | `316` |
+| `QPBOC_SELECT_NEXT_APP` | `317` |
+| `QPBOC_SELECT_PPSE` | `318` |
+| `QPBOC_FDDA_FAIL_ONLINE` | `319` |
+| `QPBOC_APP_EXPIRED_ONLINE` | `320` |
+| `QPBOC_PDOL_MISSING_9F66` | `321` |
+| `QPBOC_FCI_MISSING_9F38` | `323` |
+
+## FingerprintConstantFingerPosition
+
+`com.topwise.cloudpos.aidl.fingerprint.FingerprintConstant$FingerPosition`
+
+| Name | Value |
+| --- | --- |
+| `Unknown` | `0` |
+| `RightThumb` | `1` |
+| `RightIndexFinger` | `2` |
+| `RightMiddleFinger` | `3` |
+| `RightRingFinger` | `4` |
+| `RightLittleFinger` | `5` |
+| `LeftThumb` | `6` |
+| `LeftIndexFinger` | `7` |
+| `LeftMiddleFinger` | `8` |
+| `LeftRingFinger` | `9` |
+| `LeftLittleFinger` | `10` |
+
+## FingerprintConstantImgCompressAlg
+
+`com.topwise.cloudpos.aidl.fingerprint.FingerprintConstant$ImgCompressAlg`
+
+| Name | Value |
+| --- | --- |
+| `UNCOMPRESSED_NO_BIT_PACKING` | `0` |
+| `UNCOMPRESSED_BIT_PACKED` | `1` |
+| `COMPRESSED_WSQ` | `2` |
+| `COMPRESSED_JPEG` | `3` |
+| `COMPRESSED_JPEG2000` | `4` |
+| `PNG` | `5` |
+
+## FingerprintConstantImgFormat
+
+`com.topwise.cloudpos.aidl.fingerprint.FingerprintConstant$ImgFormat`
+
+| Name | Value |
+| --- | --- |
+| `FORMAT_RAW` | `0` |
+| `FORMAT_BMP` | `1` |
+| `FORMAT_ISO` | `2` |
+| `FORMAT_ANSI` | `3` |
+| `FORMAT_WSQ` | `4` |
+
+## FingerprintConstantLfdLevel
+
+`com.topwise.cloudpos.aidl.fingerprint.FingerprintConstant$LfdLevel`
+
+| Name | Value |
+| --- | --- |
+| `OFF` | `0` |
+| `EXTRA_LOW` | `1` |
+| `LOW` | `2` |
+| `MEDIUM` | `3` |
+| `HIGH` | `4` |
+| `ULTRA_HIGH` | `5` |
+
+## FingerprintConstantSecurityLevel
+
+`com.topwise.cloudpos.aidl.fingerprint.FingerprintConstant$SecurityLevel`
+
+| Name | Value |
+| --- | --- |
+| `LEVEL5` | `5` |
+| `LEVEL4` | `4` |
+| `LEVEL3` | `3` |
+| `LEVEL2` | `2` |
+| `LEVEL1` | `1` |
+
+## FingerprintConstantTrustFingerException
+
+`com.topwise.cloudpos.aidl.fingerprint.FingerprintConstant$TrustFingerException`
+
+| Name | Value |
+| --- | --- |
+| `SUCCESS` | `0` |
+| `FAIL` | `1` |
+| `DEVICE_NOT_FOUND` | `2` |
+| `DEVICE_NOT_AUTHORILIZED` | `3` |
+| `DEVICE_NOT_INITIALIZED` | `4` |
+| `DEVICE_NOT_CONNECTED` | `5` |
+| `DEVICE_NOT_OPENED` | `6` |
+| `DEVICE_GET_INTERFACE_FAIL` | `7` |
+| `DEVICE_GET_ENDPOINT_FAIL` | `8` |
+| `DEVICE_GET_CONNECTION_FAIL` | `9` |
+| `DEVICE_NO_USB_HOST_FEATURE` | `10` |
+| `DEVICE_NOT_ACCESSIBLE` | `11` |
+| `DEVICE_ALREADY_OPENED` | `12` |
+| `DEVICE_ALREADY_CLOSED` | `13` |
+| `API_NOT_SUPPORTED` | `14` |
+| `FAKE_FINGER` | `15` |
+| `NO_FINGER` | `16` |
+| `CAPTURE_FAIL` | `17` |
+| `CAPTURE_ERROR` | `18` |
+| `TRANSFER_PACKET_ERROR` | `19` |
+| `TRANSFER_READ_ERROR` | `20` |
+| `TRANSFER_WRITE_ERROR` | `21` |
+| `TRANSFER_CONTROL_ERROR` | `22` |
+| `INVALID_PARAM_VALUE` | `23` |
+| `NOT_ENOUGH_MEMORY` | `24` |
+| `INVALID_DEVICE_INDEX` | `25` |
+| `FP_FEATURE_CONVERT_ERROR` | `26` |
+| `FP_BAD_IMAGE` | `27` |
+| `FP_INVALID_DATA` | `28` |
+| `INIT_ALGORITHM_ERROR` | `29` |
+| `UNKNOW_TYPE` | `30` |
+| `GENERALIZE_TEMPLATE_FAIL_NOT_SAME_FINGER` | `31` |
+| `TIME_OUT` | `32` |
+| `UNKNOW_ERROR` | `33` |
+
+## KeyManagerErrorCode
+
+`com.topwise.cloudpos.aidl.keymanager.KeyManagerErrorCode`
+
+| Name | Value |
+| --- | --- |
+| `SUCCESS` | `0` |
+| `ERROR_PARAMETER` | `-1` |
+| `ERROR_KEY_INDEX` | `-2` |
+| `ERROR_DATA_NULL` | `-3` |
+| `ERROR_KEY_TYPE` | `-4` |
+| `ERROR_ALG_TYPE` | `-5` |
+| `ERROR_ALG_MODE` | `-6` |
+| `ERROR_PADDING_MODE` | `-7` |
+| `ERROR_DATA_LENGTH` | `-8` |
+| `ERROR_CAL_DATA` | `-9` |
+| `ERROR_MODE_NO_SUPPORT` | `-10` |
+| `ERROR_KEY_TYPE_NO_SUPPORT` | `-11` |
+
+## KeyLoadManagerConstantAlgMode
+
+`com.topwise.cloudpos.aidl.kld.KeyLoadManagerConstant$AlgMode`
+
+| Name | Value |
+| --- | --- |
+| `ALG_MODE_3DES` | `1` |
+| `ALG_MODE_AES128` | `3` |
+| `ALG_MODE_AES192` | `4` |
+| `ALG_MODE_AES256` | `5` |
+
+## MQTTErrorCode
+
+`com.topwise.cloudpos.aidl.mqtt.MQTTErrorCode`
+
+| Name | Value |
+| --- | --- |
+| `MQTT_CODE_SUCCESS` | `0` |
+| `MQTT_CODE_ERROR_PARAMETER_INVALID` | `-1` |
+| `MQTT_CODE_ERROR_NO_CONTENT` | `-2` |
+| `MQTT_CODE_ERROR_NO_NETWORK` | `-3` |
+| `MQTT_CODE_ERROR_DUPLICATE_CONNECTED` | `-4` |
+| `MQTT_CODE_ERROR_UNKNOWN` | `-5` |
+| `REASON_CODE_INVALID_PROTOCOL_VERSION` | `1` |
+| `REASON_CODE_INVALID_CLIENT_ID` | `2` |
+| `REASON_CODE_BROKER_UNAVAILABLE` | `3` |
+| `REASON_CODE_FAILED_AUTHENTICATION` | `4` |
+| `REASON_CODE_NOT_AUTHORIZED` | `5` |
+| `REASON_CODE_UNEXPECTED_ERROR` | `6` |
+| `REASON_CODE_SUBSCRIBE_FAILED` | `128` |
+| `REASON_CODE_CLIENT_TIMEOUT` | `32000` |
+| `REASON_CODE_NO_MESSAGE_IDS_AVAILABLE` | `32001` |
+| `REASON_CODE_WRITE_TIMEOUT` | `32002` |
+| `REASON_CODE_CLIENT_CONNECTED` | `32100` |
+| `REASON_CODE_CLIENT_ALREADY_DISCONNECTED` | `32101` |
+| `REASON_CODE_CLIENT_DISCONNECTING` | `32102` |
+| `REASON_CODE_SERVER_CONNECT_ERROR` | `32103` |
+| `REASON_CODE_CLIENT_NOT_CONNECTED` | `32104` |
+| `REASON_CODE_SOCKET_FACTORY_MISMATCH` | `32105` |
+| `REASON_CODE_SSL_CONFIG_ERROR` | `32106` |
+| `REASON_CODE_CLIENT_DISCONNECT_PROHIBITED` | `32107` |
+| `REASON_CODE_INVALID_MESSAGE` | `32108` |
+| `REASON_CODE_CONNECTION_LOST` | `32109` |
+| `REASON_CODE_CONNECT_IN_PROGRESS` | `32110` |
+| `REASON_CODE_CLIENT_CLOSED` | `32111` |
+| `REASON_CODE_TOKEN_INUSE` | `32201` |
+| `REASON_CODE_MAX_INFLIGHT` | `32202` |
+| `REASON_CODE_DISCONNECTED_BUFFER_FULL` | `32203` |
+
+## InstallFailErrorCode
+
+`com.topwise.cloudpos.aidl.pm.InstallFailErrorCode`
+
+| Name | Value |
+| --- | --- |
+| `INSTALL_SUCCEEDED` | `1` |
+| `INSTALL_FAILED_SMART_UPDATE_PARAMETER` | `2` |
+| `INSTALL_FAILED_SMART_UPDATE_PACKAGE_NAME_NO_EXIST` | `3` |
+| `INSTALL_FAILED_SMART_UPDATE_CHECK_MD5` | `4` |
+| `INSTALL_FAILED_SMART_UPDATE_PATCH` | `5` |
+| `INSTALL_FAILED_ALREADY_EXISTS` | `-1` |
+| `INSTALL_FAILED_INVALID_APK` | `-2` |
+| `INSTALL_FAILED_INVALID_URI` | `-3` |
+| `INSTALL_FAILED_INSUFFICIENT_STORAGE` | `-4` |
+| `INSTALL_FAILED_DUPLICATE_PACKAGE` | `-5` |
+| `INSTALL_FAILED_NO_SHARED_USER` | `-6` |
+| `INSTALL_FAILED_UPDATE_INCOMPATIBLE` | `-7` |
+| `INSTALL_FAILED_SHARED_USER_INCOMPATIBLE` | `-8` |
+| `INSTALL_FAILED_MISSING_SHARED_LIBRARY` | `-9` |
+| `INSTALL_FAILED_REPLACE_COULDNT_DELETE` | `-10` |
+| `INSTALL_FAILED_DEXOPT` | `-11` |
+| `INSTALL_FAILED_OLDER_SDK` | `-12` |
+| `INSTALL_FAILED_CONFLICTING_PROVIDER` | `-13` |
+| `INSTALL_FAILED_NEWER_SDK` | `-14` |
+| `INSTALL_FAILED_TEST_ONLY` | `-15` |
+| `INSTALL_FAILED_CPU_ABI_INCOMPATIBLE` | `-16` |
+| `INSTALL_FAILED_MISSING_FEATURE` | `-17` |
+| `INSTALL_FAILED_CONTAINER_ERROR` | `-18` |
+| `INSTALL_FAILED_INVALID_INSTALL_LOCATION` | `-19` |
+| `INSTALL_FAILED_MEDIA_UNAVAILABLE` | `-20` |
+| `INSTALL_FAILED_VERIFICATION_TIMEOUT` | `-21` |
+| `INSTALL_FAILED_VERIFICATION_FAILURE` | `-22` |
+| `INSTALL_FAILED_PACKAGE_CHANGED` | `-23` |
+| `INSTALL_FAILED_UID_CHANGED` | `-24` |
+| `INSTALL_FAILED_VERSION_DOWNGRADE` | `-25` |
+| `INSTALL_FAILED_PERMISSION_MODEL_DOWNGRADE` | `-26` |
+| `INSTALL_FAILED_SANDBOX_VERSION_DOWNGRADE` | `-27` |
+| `INSTALL_FAILED_MISSING_SPLIT` | `-28` |
+| `INSTALL_PARSE_FAILED_NOT_APK` | `-100` |
+| `INSTALL_PARSE_FAILED_BAD_MANIFEST` | `-101` |
+| `INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION` | `-102` |
+| `INSTALL_PARSE_FAILED_NO_CERTIFICATES` | `-103` |
+| `INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES` | `-104` |
+| `INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING` | `-105` |
+| `INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME` | `-106` |
+| `INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID` | `-107` |
+| `INSTALL_PARSE_FAILED_MANIFEST_MALFORMED` | `-108` |
+| `INSTALL_PARSE_FAILED_MANIFEST_EMPTY` | `-109` |
+| `INSTALL_FAILED_INTERNAL_ERROR` | `-110` |
+| `INSTALL_FAILED_USER_RESTRICTED` | `-111` |
+| `INSTALL_FAILED_DUPLICATE_PERMISSION` | `-112` |
+| `INSTALL_FAILED_NO_MATCHING_ABIS` | `-113` |
+| `NO_NATIVE_LIBRARIES` | `-114` |
+| `INSTALL_FAILED_ABORTED` | `-115` |
+| `INSTALL_FAILED_SESSION_INVALID` | `-116` |
+| `INSTALL_FAILED_BAD_DEX_METADATA` | `-117` |
+| `INSTALL_FAILED_BAD_SIGNATURE` | `-118` |
+| `INSTALL_FAILED_OTHER_STAGED_SESSION_IN_PROGRESS` | `-119` |
+| `INSTALL_FAILED_MULTIPACKAGE_INCONSISTENCY` | `-120` |
+| `INSTALL_FAILED_WRONG_INSTALLED_VERSION` | `-121` |
+| `INSTALL_FAILED_PROCESS_NOT_DEFINED` | `-122` |
+| `INSTALL_PARSE_FAILED_ONLY_COREAPP_ALLOWED` | `-123` |
+| `INSTALL_PARSE_FAILED_RESOURCES_ARSC_COMPRESSED` | `-124` |
+| `INSTALL_PARSE_FAILED_SKIPPED` | `-125` |
+| `INSTALL_FAILED_DUPLICATE_PERMISSION_GROUP` | `-126` |
+| `INSTALL_FAILED_BAD_PERMISSION_GROUP` | `-127` |
+| `INSTALL_ACTIVATION_FAILED` | `-128` |
+
+## SystemPropConfig
+
+`com.topwise.cloudpos.aidl.system.SystemPropConfig`
+
+| Name | Value |
+| --- | --- |
+| `BLIND_PINPAD_USE_CUSTOM_LANG_KEY` | `"persist.sys.bli_use_cus_lan"` |
+| `BLIND_PINPAD_CUSTOM_LANG_KEY` | `"persist.sys.blind_tts_lang"` |
+| `SUPPORT_SUB_TP` | `"ro.device.support.sub.tp"` |
+
+## AidlErrorCodeCPUCard
+
+`com.topwise.cloudpos.data.AidlErrorCode$CPUCard`
+
+| Name | Value |
+| --- | --- |
+| `OPEN_SUCCEED` | `0` |
+| `CARD_NOT_SUPPORTED` | `1` |
+| `OPEN_FAILED` | `2` |
+
+## AidlErrorCodeEMV
+
+`com.topwise.cloudpos.data.AidlErrorCode$EMV`
+
+| Name | Value |
+| --- | --- |
+| `EMV_KERNEL_COMMUNICATE_ERROR` | `-4` |
+| `EMV_KERNEL_EXCUTE_ERROR` | `-5` |
+| `EMV_ILLIGAL_PARAMETER_ERROR` | `-7` |
+| `EMV_READ_KERNEL_DATA_FAIL` | `-8` |
+| `EMV_KERNEL_UNKNOWN_EVENTID_ERROR` | `-6` |
+| `ERROR_CHECK_MAGCARD_ERROR` | `-3` |
+| `ERROR_CHECK_ICCARD_ERROR` | `-1` |
+| `ERROR_CHECK_RFCARD_ERROR` | `-2` |
+| `ERROR_CHECK_REFUSE_MAGCARD_FOR_ICCARD` | `-16` |
+| `ERROR_CHECK_TDK_NOT_EXIST` | `-17` |
+| `ERROR_CHECK_ICCARD_RESET_ERROR` | `-20` |
+| `ERROR_CHECK_PARAMS_ERROR` | `-18` |
+| `EMV_PUBLICKEY_NULL` | `-1` |
+| `EMV_AID_NULL` | `-2` |
+| `EMV_PUBLICKEY_AID_NULL` | `-3` |
+| `EMV_PUBLICKEY_AID_EXIST` | `0` |
+| `SPEC_CODE_APDU_EXCHANGE_FAIL` | `256` |
+| `SPEC_CODE_APDU_SW_FAIL` | `512` |
+| `SPEC_CODE_CARD_LOCK` | `768` |
+| `SPEC_CODE_APP_LOCK` | `1024` |
+| `SPEC_CODE_NO_APP` | `1280` |
+| `SPEC_CODE_SERVICE_NOT_ALLOWED` | `1536` |
+| `SPEC_CODE_CANCEL` | `1792` |
+| `SPEC_CODE_OTHER` | `-1` |
+
+## AidlErrorCodeMagCard
+
+`com.topwise.cloudpos.data.AidlErrorCode$MagCard`
+
+| Name | Value |
+| --- | --- |
+| `DEVICE_IS_BUSY` | `0` |
+| `TRACK_DATA_ERR` | `1` |
+| `OTHER_ERROR` | `2` |
+
+## AidlErrorCodePinpad
+
+`com.topwise.cloudpos.data.AidlErrorCode$Pinpad`
+
+| Name | Value |
+| --- | --- |
+| `ERROR_NODEV` | `-1` |
+| `ERROR_INPUTTIMES` | `-2` |
+| `ERROR_KEYTYPE` | `-3` |
+| `ERROR_TIMEOUT` | `-4` |
+| `ERROR_UNKNOWN` | `-5` |
+| `ERROR_MAC` | `-6` |
+| `ERROR_ENCRYPT` | `-7` |
+| `ERROR_INPUT_LEN` | `-8` |
+| `ERROR_INPUT_PARAM` | `-9` |
+| `ERROR_PINPAD_NO_SUPPORT` | `-10` |
+
+## AidlErrorCodePrinter
+
+`com.topwise.cloudpos.data.AidlErrorCode$Printer`
+
+| Name | Value |
+| --- | --- |
+| `ERROR_PRINT_NOPAPER` | `1` |
+| `ERROR_PRINT_HOT` | `2` |
+| `ERROR_PRINT_UNKNOWN` | `3` |
+| `ERROR_DEV_NOT_OPEN` | `4` |
+| `ERROR_DEV_IS_BUSY` | `5` |
+| `ERROR_PRINT_BITMAP_WIDTH_OVERFLOW` | `6` |
+| `ERROR_PRINT_BITMAP_OTHER` | `7` |
+| `ERROR_PRINT_BARCODE_OTHER` | `8` |
+| `ERROR_PRINT_ILLIGALARGUMENT` | `9` |
+| `ERROR_PRINT_TEXT_OTHER` | `10` |
+| `ERROR_PRINT_DATA_MAC` | `11` |
+
+## AidlErrorCodeRFCard
+
+`com.topwise.cloudpos.data.AidlErrorCode$RFCard`
+
+| Name | Value |
+| --- | --- |
+| `ERROR_IS_BUSY` | `0` |
+| `ERROR_NOT_OPEN` | `1` |
+| `ERROR_KEY_TYPE` | `-1` |
+| `ERROR_KEY_LENTH` | `-2` |
+| `ERROR_RESET_DATA` | `-3` |
+| `ERROR_UNKNOWN` | `-4` |
+| `ERROR_AUTH_FAIL` | `-5` |
+| `ERROR_READ_FAIL` | `-6` |
+| `ERROR_WRITE_FAIL` | `-7` |
+| `ERROR_SELECT_FAIL` | `-8` |
+| `ERROR_ADD_FAIL` | `-9` |
+| `ERROR_REDUCE_FAIL` | `-10` |
+| `ERROR_DELIVERY_FAIL` | `-11` |
+
+## AidlErrorCodeScannerError
+
+`com.topwise.cloudpos.data.AidlErrorCode$ScannerError`
+
+| Name | Value |
+| --- | --- |
+| `ERROR_ALREADY_INIT` | `109001` |
+| `ERROR_INIT_SCANNER_ENGINE` | `109002` |
+| `ERROR_INIT_DECODER` | `109003` |
+| `ERROR_DECODE_FAILED` | `109004` |
+| `ERROR_AUTH_LICENSE` | `109005` |
+| `ERROR_OPEN_CAMERA` | `109006` |
+| `ERROR_INPUT_PARAMS` | `109007` |
+
+## AidlErrorCodeSerialPort
+
+`com.topwise.cloudpos.data.AidlErrorCode$SerialPort`
+
+| Name | Value |
+| --- | --- |
+| `ERROR_NODEV` | `-1` |
+| `DEVICE_IS_BUSY` | `-2` |
+| `DEVICE_NOT_OPEN` | `-3` |
+| `READ_ERROR` | `-4` |
+
+## AidlErrorCodeSystem
+
+`com.topwise.cloudpos.data.AidlErrorCode$System`
+
+| Name | Value |
+| --- | --- |
+| `INSTALL_SUCCESS` | `0` |
+| `INSTALL_FAILED_ALREADY_EXISTS` | `-1` |
+| `INSTALL_FAILED_INVALID_APK` | `-2` |
+| `INSTALL_FAILED_INVALID_URI` | `-3` |
+| `INSTALL_FAILED_INSUFFICIENT_STORAGE` | `-4` |
+| `INSTALL_FAILED_DUPLICATE_PACKAGE` | `-5` |
+| `INSTALL_FAILED_NO_SHARED_USER` | `-6` |
+| `INSTALL_FAILED_UPDATE_INCOMPATIBLE` | `-7` |
+| `INSTALL_FAILED_SHARED_USER_INCOMPATIBLE` | `-8` |
+| `INSTALL_FAILED_MISSING_SHARED_LIBRARY` | `-9` |
+| `INSTALL_FAILED_REPLACE_COULDNT_DELETE` | `-10` |
+| `INSTALL_FAILED_DEXOPT` | `-11` |
+| `INSTALL_FAILED_OLDER_SDK` | `-12` |
+| `INSTALL_FAILED_CONFLICTING_PROVIDER` | `-13` |
+| `INSTALL_FAILED_NEWER_SDK` | `-14` |
+| `INSTALL_FAILED_TEST_ONLY` | `-15` |
+| `INSTALL_FAILED_CPU_ABI_INCOMPATIBLE` | `-16` |
+| `INSTALL_FAILED_MISSING_FEATURE` | `-17` |
+| `INSTALL_FAILED_CONTAINER_ERROR` | `-18` |
+| `INSTALL_FAILED_INVALID_INSTALL_LOCATION` | `-19` |
+| `INSTALL_FAILED_MEDIA_UNAVAILABLE` | `-20` |
+| `INSTALL_FAILED_VERIFICATION_TIMEOUT` | `-21` |
+| `INSTALL_FAILED_VERIFICATION_FAILURE` | `-22` |
+| `INSTALL_FAILED_PACKAGE_CHANGED` | `-23` |
+| `INSTALL_FAILED_UID_CHANGED` | `-24` |
+| `INSTALL_FAILED_VERSION_DOWNGRADE` | `-25` |
+| `INSTALL_PARSE_FAILED_NOT_APK` | `-100` |
+| `INSTALL_PARSE_FAILED_BAD_MANIFEST` | `-101` |
+| `INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION` | `-102` |
+| `INSTALL_PARSE_FAILED_NO_CERTIFICATES` | `-103` |
+| `INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES` | `-104` |
+| `INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING` | `-105` |
+| `INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME` | `-106` |
+| `INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID` | `-107` |
+| `INSTALL_PARSE_FAILED_MANIFEST_MALFORMED` | `-108` |
+| `INSTALL_PARSE_FAILED_MANIFEST_EMPTY` | `-109` |
+| `INSTALL_FAILED_INTERNAL_ERROR` | `-110` |
+
+## BuzzerCode
+
+`com.topwise.cloudpos.data.BuzzerCode`
+
+| Name | Value |
+| --- | --- |
+| `BUZZER_MODE_NORAML` | `0` |
+| `BUZZER_MODE_SUCCESS` | `1` |
+| `BUZZER_MODE_FAIL` | `2` |
+| `BUZZER_MODE_INTERVAL` | `3` |
+| `BUZZER_MODE_ERROR` | `4` |
+
+## CPUCardAT24CCardType
+
+`com.topwise.cloudpos.data.CPUCard$AT24CCardType`
+
+| Name | Value |
+| --- | --- |
+| `AT24C01` | `1` |
+| `AT24C02` | `2` |
+| `AT24C04` | `4` |
+| `AT24C08` | `8` |
+| `AT24C16` | `16` |
+| `AT24C32` | `32` |
+| `AT24C64` | `64` |
+| `AT24C128` | `128` |
+| `AT24C256` | `256` |
+| `AT24C512` | `512` |
+| `AT24C1024` | `1024` |
+
+## CPUCardAT88SCCardType
+
+`com.topwise.cloudpos.data.CPUCard$AT88SCCardType`
+
+| Name | Value |
+| --- | --- |
+| `AT88SC102` | `21` |
+| `AT88SC1604` | `22` |
+| `AT88SC153` | `23` |
+| `AT88SC1608` | `24` |
+
+## CPUCardAT88SCZoneNumber
+
+`com.topwise.cloudpos.data.CPUCard$AT88SCZoneNumber`
+
+| Name | Value |
+| --- | --- |
+| `ZONE_NUM_USER0` | `0` |
+| `ZONE_NUM_USER1` | `1` |
+| `ZONE_NUM_USER2` | `2` |
+| `ZONE_NUM_USER3` | `3` |
+| `ZONE_NUM_USER4` | `4` |
+| `ZONE_NUM_USER5` | `5` |
+| `ZONE_NUM_USER6` | `6` |
+| `ZONE_NUM_USER7` | `7` |
+| `ZONE_NUM_CONFIG` | `15` |
+
+## CPUCardCPUCardType
+
+`com.topwise.cloudpos.data.CPUCard$CPUCardType`
+
+| Name | Value |
+| --- | --- |
+| `AT24CXX` | `1` |
+| `AT45D041` | `2` |
+| `SLE44X8` | `3` |
+| `AT93C46` | `7` |
+| `AT93C46A` | `8` |
+| `SLE4404` | `9` |
+| `SLE4406` | `10` |
+| `SLE4418` | `11` |
+| `SLE4428` | `12` |
+| `SLE4432` | `13` |
+| `SLE4442` | `14` |
+| `SSF1101` | `15` |
+
+## EmvConstantAccountType
+
+`com.topwise.cloudpos.data.EmvConstant$AccountType`
+
+| Name | Value |
+| --- | --- |
+| `ACCOUNT_TYPE_DEFAULT` | `1` |
+| `ACCOUNT_TYPE_SAVING` | `2` |
+| `ACCOUNT_TYPE_CHEQUEORDEBIT` | `3` |
+| `ACCOUNT_TYPE_CREDIT` | `4` |
+
+## EmvConstantAidCapkOptFlag
+
+`com.topwise.cloudpos.data.EmvConstant$AidCapkOptFlag`
+
+| Name | Value |
+| --- | --- |
+| `AID_CAPK_OPT_ADDORUPDATE_FLAG` | `1` |
+| `AID_CAPK_OPT_REMOVE_FLAG` | `2` |
+| `AID_CAPK_OPT_REMOVEALL_FLAG` | `3` |
+
+## EmvConstantAppType
+
+`com.topwise.cloudpos.data.EmvConstant$AppType`
+
+| Name | Value |
+| --- | --- |
+| `APPTYPE_LAKALA_PAYMENT` | `32768` |
+| `APPTYPE_LAKALA_BIANMIN` | `32769` |
+| `APPTYPE_LAKALA_BANKDIRECT` | `32771` |
+| `APPTYPE_LAKALA_LARGECOUNT` | `32772` |
+| `APPTYPE_LAKALA_FUNONGTONG` | `32779` |
+| `APPTYPE_BANK_STAND` | `28672` |
+
+## EmvConstantCertType
+
+`com.topwise.cloudpos.data.EmvConstant$CertType`
+
+| Name | Value |
+| --- | --- |
+| `CERT_TYPE_ID` | `0` |
+| `CERT_TYPE_OFFICER` | `1` |
+| `CERT_TYPE_PASSPORT` | `2` |
+| `CERT_TYPE_ENTER_COUNTRY` | `3` |
+| `CERT_TYPE_TEMP_ID` | `4` |
+| `CERT_TYPE_OTHER` | `5` |
+
+## EmvConstantPinType
+
+`com.topwise.cloudpos.data.EmvConstant$PinType`
+
+| Name | Value |
+| --- | --- |
+| `PINTYPE_OFFLINE` | `1` |
+| `PINTYPE_OFFLINE_LASTTIME` | `2` |
+| `PINTYPE_ONLINE` | `3` |
+
+## EmvConstantReadCardLoadLogType
+
+`com.topwise.cloudpos.data.EmvConstant$ReadCardLoadLogType`
+
+| Name | Value |
+| --- | --- |
+| `ONE_BY_ONE_TYPE` | `0` |
+| `ONE_OFF_TYPE` | `1` |
+
+## EmvConstantSlotType
+
+`com.topwise.cloudpos.data.EmvConstant$SlotType`
+
+| Name | Value |
+| --- | --- |
+| `SLOT_TYPE_IC` | `0` |
+| `SLOT_TYPE_RF` | `1` |
+
+## LedCode
+
+`com.topwise.cloudpos.data.LedCode`
+
+| Name | Value |
+| --- | --- |
+| `OPER_LED_ALL` | `0` |
+| `OPER_LED_GREEN` | `1` |
+| `OPER_LED_YELLOW` | `2` |
+| `OPER_LED_RED` | `3` |
+| `OPER_LED_BLUE` | `4` |
+
+## PinpadConstantBasicAlg
+
+`com.topwise.cloudpos.data.PinpadConstant$BasicAlg`
+
+| Name | Value |
+| --- | --- |
+| `ALG_NULL` | `0` |
+| `ALG_ENCRYPT_DES_CBC` | `1` |
+| `ALG_DECRYPT_DES_CBC` | `2` |
+| `ALG_ENCRYPT_DES_ECB` | `3` |
+| `ALG_DECRYPT_DES_ECB` | `4` |
+| `ALG_ENCRYPT_AES_CBC` | `5` |
+| `ALG_DECRYPT_AES_CBC` | `6` |
+| `ALG_ENCRYPT_AES_ECB` | `7` |
+| `ALG_DECRYPT_AES_ECB` | `8` |
+| `ALG_ENCRYPT_SM4_CBC` | `9` |
+| `ALG_DECRYPT_SM4_CBC` | `10` |
+| `ALG_ENCRYPT_SM4_ECB` | `11` |
+| `ALG_DECRYPT_SM4_ECB` | `12` |
+
+## PinpadConstantDelPedMode
+
+`com.topwise.cloudpos.data.PinpadConstant$DelPedMode`
+
+| Name | Value |
+| --- | --- |
+| `MODE_SINGLE` | `0` |
+| `MODE_WHOLE` | `1` |
+| `MODE_TYPE` | `2` |
+
+## PinpadConstantKCVVerifyMode
+
+`com.topwise.cloudpos.data.PinpadConstant$KCVVerifyMode`
+
+| Name | Value |
+| --- | --- |
+| `KCV_ENCRYPT_ZERO` | `0` |
+| `KCV_ENCRYPT_SN` | `1` |
+| `KCV_ENCRYPT_CMAC` | `2` |
+
+## PinpadConstantKeyType
+
+`com.topwise.cloudpos.data.PinpadConstant$KeyType`
+
+| Name | Value |
+| --- | --- |
+| `KEYTYPE_TMK` | `0` |
+| `KEYTYPE_FIXED_PEK` | `1` |
+| `KEYTYPE_FIXED_MAK` | `2` |
+| `KEYTYPE_FIXED_TDK` | `3` |
+| `KEYTYPE_PEK` | `4` |
+| `KEYTYPE_MAK` | `5` |
+| `KEYTYPE_TDK` | `6` |
+| `KEYTYPE_FIXED_AESPEK` | `7` |
+| `KEYTYPE_TEK` | `14` |
+| `KEYTYPE_DKEY` | `15` |
+| `KEYTYPE_DUKPT_DES` | `22` |
+| `KEYTYPE_DUKPT_DES_IPEK` | `22` |
+| `KEYTYPE_DUKPT_DES_BDK` | `23` |
+| `KEYTYPE_DUKPT_DES_KSN` | `24` |
+| `KEYTYPE_DUKPT_AES_KEY` | `25` |
+| `KEYTYPE_DUKPT_AES_IPEK` | `26` |
+| `KEYTYPE_DUKPT_AES_BDK` | `27` |
+| `KEYTYPE_DUKPT_AES_KSN` | `28` |
+| `KEYTYPE_DUKPT_AES_128` | `25` |
+| `KEYTYPE_DUKPT_AES_192` | `29` |
+| `KEYTYPE_DUKPT_AES_256` | `30` |
+| `KEYTYPE_DUKPT_AES_2TDES` | `31` |
+| `KEYTYPE_DUKPT_AES_3TDES` | `32` |
+| `KEYTYPE_ROOT` | `100` |
+
+## PinpadConstantMacAlg
+
+`com.topwise.cloudpos.data.PinpadConstant$MacAlg`
+
+| Name | Value |
+| --- | --- |
+| `PIN_BLOCK_0` | `13` |
+| `PIN_BLOCK_1` | `14` |
+| `PIN_BLOCK_3` | `16` |
+| `PIN_BLOCK_4` | `17` |
+| `ANSIX99CBC` | `18` |
+| `ANSIX99ECB` | `19` |
+| `EMV2000` | `20` |
+| `CUP` | `21` |
+| `ANSIX919` | `22` |
+
+## PinpadConstantPinType
+
+`com.topwise.cloudpos.data.PinpadConstant$PinType`
+
+| Name | Value |
+| --- | --- |
+| `INLINE_TYPE` | `0` |
+| `OUTLINE_TYPE` | `1` |
+| `REAL_OUTLINE_TYPE` | `2` |
+
+## PinpadConstantPinpadId
+
+`com.topwise.cloudpos.data.PinpadConstant$PinpadId`
+
+| Name | Value |
+| --- | --- |
+| `BUILTIN` | `0` |
+| `EXTERNAL` | `1` |
+
+## PinpadConstantStoredRecord
+
+`com.topwise.cloudpos.data.PinpadConstant$StoredRecord`
+
+| Name | Value |
+| --- | --- |
+| `ACTION_READ` | `0` |
+| `ACTION_WRITE` | `1` |
+
+## PrinterConstantBarCodeType
+
+`com.topwise.cloudpos.data.PrinterConstant$BarCodeType`
+
+| Name | Value |
+| --- | --- |
+| `BARCODE_TYPE_UPCA` | `65` |
+| `BARCODE_TYPE_UPCE` | `66` |
+| `BARCODE_TYPE_JAN13` | `67` |
+| `BARCODE_TYPE_JAN8` | `68` |
+| `BARCODE_TYPE_CODE39` | `69` |
+| `BARCODE_TYPE_ITF` | `70` |
+| `BARCODE_TYPE_CODEBAR` | `71` |
+| `BARCODE_TYPE_CODE93` | `72` |
+| `BARCODE_TYPE_CODE128` | `73` |
+
+## PrinterConstantHRIPosition
+
+`com.topwise.cloudpos.data.PrinterConstant$HRIPosition`
+
+| Name | Value |
+| --- | --- |
+| `POSITION_NONE` | `1` |
+| `POSITION_ABOVE` | `2` |
+| `POSITION_BELOW` | `3` |
+| `POSITION_BOTH` | `4` |
+
+## PrinterConstantPrintLen
+
+`com.topwise.cloudpos.data.PrinterConstant$PrintLen`
+
+| Name | Value |
+| --- | --- |
+| `RESET_PRINT_PIXELS_LEN` | `0` |
+| `RETURN_PRINT_PIXELS_LEN` | `1` |
+
+## PrinterConstantPrinterLed
+
+`com.topwise.cloudpos.data.PrinterConstant$PrinterLed`
+
+| Name | Value |
+| --- | --- |
+| `PRINTER_LED_LIGHT` | `2147483647` |
+| `PRINTER_LED_FLICKER_SLOW` | `1000` |
+| `PRINTER_LED_FLICKER_DEFAULT` | `500` |
+| `PRINTER_LED_FLICKER_FAST` | `250` |
+
+## PrinterConstantPrinterState
+
+`com.topwise.cloudpos.data.PrinterConstant$PrinterState`
+
+| Name | Value |
+| --- | --- |
+| `PRINTER_STATE_NORMAL` | `0` |
+| `PRINTER_STATE_NOPAPER` | `1` |
+| `PRINTER_STATE_HIGHTEMP` | `2` |
+| `PRINTER_STATE_UNKNOWN` | `3` |
+| `PRINTER_STATE_NOT_OPEN` | `4` |
+| `PRINTER_STATE_DEV_ERROR` | `5` |
+| `PRINTER_STATE_LOWVOL_ERROR` | `6` |
+| `PRINTER_STATE_BUSY` | `7` |
+| `PRINTER_STATE_CUT` | `8` |
+| `PRINTER_STATE_OUT` | `9` |
+| `PRINTER_PAPER_RUN_OUT` | `10` |
+| `PRINTER_COVER_OPEN` | `11` |
+| `PRINT_ERROR_PARAMETER` | `255` |
+
+## PsamConstant
+
+`com.topwise.cloudpos.data.PsamConstant`
+
+| Name | Value |
+| --- | --- |
+| `PSAM_DEV_ID_1` | `1` |
+| `PSAM_DEV_ID_2` | `2` |
+| `PSAM_DEV_ID_3` | `3` |
+
+## RFCardRFCardType
+
+`com.topwise.cloudpos.data.RFCard$RFCardType`
+
+| Name | Value |
+| --- | --- |
+| `UNSUPPORTED` | `0` |
+| `TYPEA` | `1` |
+| `TYPEB` | `2` |
+| `TYPEC` | `3` |
+| `MIFARE_ONE` | `16` |
+| `MIFARE_S50` | `32` |
+| `MIFARE_ONE_S70` | `64` |
+| `MIFARE_ULTRALIGHT` | `80` |
+| `MIFARE_ULTRALIGHT_C` | `81` |
+| `MIFARE_PLUS` | `96` |
+| `MIFARE_DESFIRE` | `112` |
+| `MIFARE_CPU` | `128` |
+| `MIFARE_PRO` | `129` |
+| `MIFARE_S50_PRO` | `130` |
+| `MIFARE_S70_PRO` | `131` |
+| `RF_MULTI_CARD` | `255` |
+
+## SerialportConstant
+
+`com.topwise.cloudpos.data.SerialportConstant`
+
+| Name | Value |
+| --- | --- |
+| `PORT_ONE` | `1` |
+| `PORT_TWO` | `2` |
+| `PORT_THREE` | `3` |
+| `PORT_FOUR` | `4` |
+| `PORT_FIVE` | `5` |
+
+## SystemConstantDayDreamMode
+
+`com.topwise.cloudpos.data.SystemConstant$DayDreamMode`
+
+| Name | Value |
+| --- | --- |
+| `DOCK` | `0` |
+| `SLEEP` | `1` |
+| `WHILE_CHARGING` | `2` |
+| `NEVER` | `3` |
+| `ALWAYS` | `4` |
+
+## SystemConstantNavigationButton
+
+`com.topwise.cloudpos.data.SystemConstant$NavigationButton`
+
+| Name | Value |
+| --- | --- |
+| `HOME_BUTTON` | `3` |
+| `BACK_BUTTON` | `4` |
+| `MENU_BUTTON` | `82` |
+
+## SystemConstantScreenLockType
+
+`com.topwise.cloudpos.data.SystemConstant$ScreenLockType`
+
+| Name | Value |
+| --- | --- |
+| `NONE` | `0` |
+| `SWIPE` | `1` |
+| `PATTERN` | `2` |
+| `PIN` | `3` |
+| `PASSWORD` | `4` |
+
+## SystemConstantSystemConfigurationMenu
+
+`com.topwise.cloudpos.data.SystemConstant$SystemConfigurationMenu`
+
+| Name | Value |
+| --- | --- |
+| `LOCATION` | `1` |
+| `AIRPORT` | `2` |
+| `LOCATION_AND_AIRPORT` | `3` |
+| `WIFI` | `4` |
+| `BLUETOOTH` | `5` |
+| `SETTINGS` | `6` |
+| `MOBILE_DATA` | `7` |
+| `HOTSPOT` | `8` |
+| `CAST` | `9` |
+| `FLASHLIGHT` | `10` |
+| `NIGHT_LIGHT` | `11` |
+| `DO_NOT_DISTURB` | `12` |
+| `DATA_SAVER` | `13` |
+| `MEDIA_VOLUME_BAR` | `14` |
+| `NOTIFICATIONS` | `19` |
+| `SETTINGS_NOTIFICATIONS` | `20` |
+| `SILENT` | `21` |
+| `MANAGE` | `22` |
+
+## SystemConstantTetheringOption
+
+`com.topwise.cloudpos.data.SystemConstant$TetheringOption`
+
+| Name | Value |
+| --- | --- |
+| `TETHER` | `1` |
+| `USB` | `2` |
+| `WIFI` | `3` |
+| `SET_WIFI` | `4` |
+| `BLUETOOTH` | `5` |
+
+## SystemConstantWakeUpSrcKey
+
+`com.topwise.cloudpos.data.SystemConstant$WakeUpSrcKey`
+
+| Name | Value |
+| --- | --- |
+| `SYSTEM_WAKEUP_IC` | `1` |
+| `SYSTEM_WAKEUP_MSR` | `2` |
+| `SYSTEM_WAKEUP_KEY_DIGIT` | `4` |
+| `SYSTEM_WAKEUP_KEY_UP` | `64` |
+| `SYSTEM_WAKEUP_KEY_DOWN` | `128` |
+| `SYSTEM_WAKEUP_KEY_CANCEL` | `256` |
+| `SYSTEM_WAKEUP_KEY_CLEAR` | `512` |
+| `SYSTEM_WAKEUP_KEY_ENTER` | `1024` |
+| `SYSTEM_WAKEUP_KEY_ALL_KEY` | `1988` |
+

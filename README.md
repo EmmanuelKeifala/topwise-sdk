@@ -130,167 +130,24 @@ printer.printText(items).pipe(
 )
 ```
 
-### EMV kernel callbacks
-
-`emvL2.EMV_SetCallback`, `paypass.setCallback` and `qpboc.setCallback` are not
-notifications — the kernel *asks* the app a question and blocks the binder
-thread on the answer. Those take a handler record, and every handler must
-produce a value:
-
-```ts
-yield* emvL2.EMV_SetCallback(
-  {
-    cGetOnlinePin: ({ bAllowBypass, pPAN }) => promptForPin(pPAN, bAllowBypass),
-    cCheckExceptionFile: () => Effect.succeed(0),
-    // …all 11 methods are required
-  },
-  { timeoutMs: 30_000, fallback: 0 },
-)
-```
-
-Handlers have no error channel on purpose: the kernel is stalled waiting, so
-you must decide what to answer rather than let it time out. If a handler dies
-or overruns `timeoutMs`, the kernel receives `fallback` — pick the value your
-kernel reads as "decline".
-
-### Interfaces handed back as binders
-
-A few methods return another AIDL interface rather than data. The object stays
-native and JS gets a handle:
-
-```ts
-const mgr  = yield* pedestal.getSerialManager()          // PedestalSerialManagerRef
-const ports = yield* pedestalSerialManagerAt(mgr).enumSerialports()
-const port = yield* pedestalSerialManagerAt(mgr).getSerialport(ports[0])
-yield* serialportAt(port).open()                          // SerialportRef
-```
-
-Handles are keyed by binder identity natively, so asking twice returns the
-same one. Call `releaseHandle(ref)` only if you churn through them.
-
-`scanner` and `triggerStatus` (tamper detection) have no `DeviceServiceManager`
-getter at all — they exist only on the root `AidlDeviceService`, which the
-manager keeps private. They are reached reflectively and exposed as ordinary
-modules.
-
-### Android types
-
-Platform types that appear in the AIDL surface have hand-written mappings in
-[`src/android.ts`](./src/android.ts), each with a matching rule in
-`TopwiseCodec.kt`:
-
-| Java | TypeScript |
-| --- | --- |
-| `ContentValues` | `Record<string, string \| number \| boolean \| Uint8Array \| null>` |
-| `ComponentName`, `Rect` | plain objects |
-| `KeyEvent`, `UsageStats` | flattened to their accessors |
-| `X509Certificate` | `{ der, subject, issuer, serialNumber, notBefore, notAfter }` |
-| `BigDecimal`, `BigInteger` | `string` (exact — serials and money outrun a double) |
-| `SparseIntArray`, `SparseArray`, `ArrayMap` | `Record<string, T>` |
-| `Typeface` | `TypefaceSpec` — a request to load a font |
-| `ParcelFileDescriptor` | `FileRef` — a path; the fd is opened and closed natively |
-| `IBinder` | `RemoteHandle` |
-
-### Printing a receipt
-
-`PrintTemplate` is the layout builder: rows go in, a bitmap comes out, and that
-bitmap is what the printer puts on paper. It is hand-written on both sides —
-it holds an Android `Context`, and its six `add` overloads differ only by
-argument *type*, which reflective dispatch cannot tell apart once the arguments
-are JSON. Each overload gets a distinct name:
-
-| Java | here |
-| --- | --- |
-| `add(TextUnit)` | `addText` |
-| `add(int, TextUnit, int, TextUnit)` | `addColumns2` |
-| `add(int, TextUnit, int, TextUnit, int, TextUnit)` | `addColumns3` |
-| `add(ImageUnit)` | `addImage` |
-| `add(List<TextUnit>, ImageUnit)` | `addTextsThenImage` |
-| `add(ImageUnit, List<TextUnit>)` | `addImageThenTexts` |
-| `init(Context)` / `init(Context, Typeface)` | `init` / `initWithTypeface` |
-
-```ts
-import { printTemplate, printer } from "@slipstream/topwise-sdk"
-
-const receipt = Effect.gen(function* () {
-  yield* printTemplate.init()
-
-  const bitmap = yield* printTemplate.session(
-    Effect.gen(function* () {
-      yield* printTemplate.addText({ text: "ACME STORE", fontSize: 28, align: "CENTER", isBold: true })
-      yield* printTemplate.addColumns2(3, { text: "Coffee" }, 1, { text: "4.50", align: "RIGHT" })
-      yield* printTemplate.addColumns2(3, { text: "Total" }, 1, { text: "4.50", align: "RIGHT" })
-      return yield* printTemplate.getPrintBitmap()
-    }),
-  )
-
-  yield* printer.printBmp(0, 384, 0, bitmap).pipe(
-    Stream.takeUntil((e) => e._tag === "onPrintFinish" || e._tag === "onError"),
-    Stream.runDrain,
-  )
-})
-```
-
-`PrintTemplate` is a process-wide singleton, so its row buffer is shared by
-every caller — two receipts built concurrently would interleave into one
-garbled page. `session` takes the lock, clears on the way in and on the way
-out, and so a failure part way through cannot leak rows into the next receipt.
-Use it for every receipt.
-
-### Bytes and TLV
-
-`BytesUtil`, `Tlv` and `TlvList` are mirrored as **pure TypeScript** in
-[`src/bytes.ts`](./src/bytes.ts) — they are functions over bytes, so crossing
-the bridge to hex-encode a string or parse the TLV an EMV kernel just returned
-would be pointless. Being pure also makes them the part of this SDK with real
-test coverage.
-
-```ts
-import { TlvList, hexString2Bytes } from "@slipstream/topwise-sdk"
-
-const tags = TlvList.fromBytes(kernelResponse)
-const pan  = tags.getValue("5A")
-const aid  = tags.getValue("9F06")
-
-const request = new TlvList().addTlv("9F02", "000000001000").addTlv("5F2A", "0840").getBytes()
-```
-
-`int2Bytes`/`bytes2Int` take a named `bigEndian` argument. The Java originals
-take an unnamed boolean whose meaning is not recoverable from the jar, and
-guessing at byte order in a payments SDK is worse than being explicit.
-
-### PIN entry
-
-`pinpad(n).getPin` and `getMac` take an `android.os.Bundle` whose keys exist
-only inside `PinParam.getParam()`. Rather than hard-code key names scraped out
-of a method body, the parameters cross as data and Java builds the Bundle:
-
-```ts
-const bundle = yield* helpers.pinParamToBundle({
-  keyIndex: 1, pinType: 0, keyType: 1, panBlock, timeOut: 60,
-  keyMinLength: 4, keyMaxLength: 12,
-})
-yield* pinpad(0).getPin(bundle).pipe(Stream.takeUntil(...), Stream.runHead)
-```
-
 ### Errors
 
-`TopwiseError` is *transport* failure: unbound service, unavailable module,
-dead binder. The codes worth knowing apart:
+`TopwiseError` is *transport* failure. Most device calls report business
+failure in-band as a non-zero `int` — a `0` return is success, anything else
+is the device refusing. Full code table in [docs/errors.md](./docs/errors.md).
 
-- `NOT_BOUND` — nothing is bound yet; call `ready()` first.
-- `MODULE_UNAVAILABLE` — the service **is** bound, but `DeviceServiceManager`'s
-  accessor for that module returned null. Either the terminal has no such
-  peripheral, or the app is not authorised for it. Secure peripherals (pinpad,
-  key manager, EMV kernels) are usually the latter.
-- `NO_SUCH_METHOD` — the terminal's service predates the jar these bindings
-  were generated from. Most Topwise calls report business failure in-band as a non-zero
-`int`; check those against the generated constants:
+## Documentation
 
-```ts
-import { Constants } from "@slipstream/topwise-sdk"
-Constants.AidlErrorCodePrinter.ERROR_PRINT_NOPAPER // 1
-```
+Full reference in [docs/](./docs) — every method, its signature in both styles,
+parameters, return meanings and events. Generated from the jar, so it stays in
+step with the bindings.
+
+- [Getting started](./docs/getting-started.md)
+- [Printing receipts](./docs/printing.md)
+- [PIN entry and keys](./docs/pin-and-keys.md)
+- [Errors](./docs/errors.md) · [Troubleshooting](./docs/troubleshooting.md)
+- [Concepts](./docs/concepts.md) — handles, Android types, bytes and TLV
+- [All modules](./docs/README.md#modules)
 
 ## Regenerating after a vendor jar drop
 
