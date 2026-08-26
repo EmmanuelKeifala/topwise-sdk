@@ -11,8 +11,7 @@
     "@slipstream/topwise-sdk": "file:../slipstream-topwise-sdk-0.1.0.tgz",
     "effect": "^3.22.0",
     "react": "18.3.1",
-    "react-native": "0.76.5",
-    "text-encoding-polyfill": "^0.6.7"
+    "react-native": "0.76.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
