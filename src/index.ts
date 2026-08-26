@@ -6,6 +6,9 @@
  * the trip across the bridge.
  */
 
+// Must precede every Effect import; see src/polyfill.ts.
+import "./polyfill.js";
+
 export { TopwiseError, type TopwiseErrorCode } from "./errors.js";
 export {
   Bitmap,

@@ -1,3 +1,6 @@
+// Must precede every Effect import; see src/polyfill.ts.
+import "./polyfill.js";
+
 import type { Layer } from "effect";
 import { NativeEventEmitter, NativeModules } from "react-native";
 import { layer, type CallbackEvent, type NativeBridge, type NativeEvents, type TopwiseBridge } from "./bridge.js";
