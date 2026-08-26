@@ -312,7 +312,7 @@ On that unit the secure peripherals — pinpad, key manager, EMV L2 kernels,
 key injection — report `MODULE_UNAVAILABLE`: the service is bound, but their
 accessors return null for an app the vendor has not authorised.
 
-## Caveats
+## Gotchas
 
 - Java `long` becomes a JS `number`. Values past 2^53 lose precision; none of
   the SDK's `long` returns (mileage, timestamps) get near it. `BigDecimal` and
