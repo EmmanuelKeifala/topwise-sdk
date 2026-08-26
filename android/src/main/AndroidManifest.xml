@@ -1,0 +1,48 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+      Android 11 (API 30) filters package visibility. DeviceServiceManager binds
+      with an explicit component:
+
+        action    topwise_cloudpos_device_service
+        component com.android.topwise.topusdkservice/.service.DeviceService
+
+      Without this <queries> entry that bindService call fails for any app
+      targeting API 30+, and every module accessor just keeps returning null.
+    -->
+    <queries>
+        <package android:name="com.android.topwise.topusdkservice" />
+        <intent>
+            <action android:name="topwise_cloudpos_device_service" />
+        </intent>
+    </queries>
+
+    <!-- Declared by the device service itself; protection level "normal". -->
+    <uses-permission android:name="android.permission.CLOUDPOS_PROVIDER" />
+
+    <!--
+      Per-peripheral permissions. Firmware varies in which of these it actually
+      defines - a T2N on Android 11 defines none of them, and declaring a
+      permission no package defines is simply ignored. They are kept for the
+      models that do gate on them.
+    -->
+    <uses-permission android:name="android.permission.CLOUDPOS_SYSTEMDEV" />
+    <uses-permission android:name="android.permission.CLOUDPOS_SYSTEMDEV_ALARM" />
+    <uses-permission android:name="android.permission.CLOUDPOS_SYSTEMDEV_INSTALL" />
+    <uses-permission android:name="android.permission.CLOUDPOS_SYSTEMDEV_OS_UPDATE" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PRINTER" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PINPAD" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PINPAD_PIN_BLOCK" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PINPAD_PIN_MAC" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PINPAD_ENCRYPT_DATA" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PINPAD_UPDATE_MKEY" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PINPAD_UPDATE_WKEY" />
+    <uses-permission android:name="android.permission.CLOUDPOS_EMVL" />
+    <uses-permission android:name="android.permission.CLOUDPOS_ICCARD" />
+    <uses-permission android:name="android.permission.CLOUDPOS_RFCARD" />
+    <uses-permission android:name="android.permission.CLOUDPOS_PSAMCARD" />
+    <uses-permission android:name="android.permission.CLOUDPOS_MAGCARD" />
+    <uses-permission android:name="android.permission.CLOUDPOS_MAGCARD_GETTRACKDATA" />
+    <uses-permission android:name="android.permission.CLOUDPOS_MAGCARD_GETENCRYPTTRACKDATA" />
+    <uses-permission android:name="android.permission.CLOUDPOS_SERIALPORT" />
+    <uses-permission android:name="android.permission.CLOUDPOS_SHELLMONITORDEV" />
+</manifest>

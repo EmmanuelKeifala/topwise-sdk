@@ -1,0 +1,45 @@
+// React Native autolinking includes this as a subproject of the consuming app,
+// so the Android Gradle and Kotlin plugins come from the app's classpath. A
+// `buildscript` block with its own AGP classpath here would clash with it.
+apply plugin: "com.android.library"
+apply plugin: "org.jetbrains.kotlin.android"
+
+def safeExtGet(prop, fallback) {
+  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+android {
+  namespace "com.slipstream.topwise"
+  compileSdk safeExtGet("compileSdkVersion", 34)
+
+  defaultConfig {
+    minSdk safeExtGet("minSdkVersion", 24)
+    // Dispatch is reflective; consumers must keep the Topwise classes.
+    consumerProguardFiles "proguard-rules.pro"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+
+  kotlinOptions {
+    jvmTarget = "17"
+  }
+
+  lint {
+    abortOnError false
+  }
+}
+
+repositories {
+  google()
+  mavenCentral()
+}
+
+dependencies {
+  implementation "com.facebook.react:react-android"
+  // Client-side AIDL proxies + DeviceServiceManager. These ship in the APK;
+  // only the service they talk to belongs to the terminal.
+  implementation fileTree(dir: "libs", include: ["*.jar"])
+}
