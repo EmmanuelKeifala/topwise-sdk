@@ -26,4 +26,4 @@ android/libs/*.jar
 
 # The example installs the SDK from a locally packed tarball, so its
 # lockfile pins an integrity hash that does not exist in a fresh clone.
-example/package-lock.json
+example*/package-lock.json
