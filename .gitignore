@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+*.tgz
+
+# Android build output
+android/build/
+android/.gradle/
+android/local.properties
+example/android/
+example/ios/
+
+# Vendor SDK - Topwise's proprietary property, not redistributable.
+# See README for where these go.
+T1*SDK*/
+android/libs/*.jar
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+
+# The example installs the SDK from a locally packed tarball, so its
+# lockfile pins an integrity hash that does not exist in a fresh clone.
+example/package-lock.json
