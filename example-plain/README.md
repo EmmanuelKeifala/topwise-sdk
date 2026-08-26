@@ -29,8 +29,8 @@ const stop = topwise.checkCard.checkCard(true, true, true, 60, {
 })
 ```
 
-`effect` is still in `dependencies` — it is what the SDK runs on internally.
-You never import it.
+Note this app's `package.json` lists only the SDK: no `effect`, no polyfill.
+They come along with it.
 
 ## What the app does
 
@@ -46,13 +46,14 @@ cp -r example-plain/App.tsx example-plain/index.js example-plain/app.json Topwis
 cd TopwisePlain
 
 npm run --prefix .. build && npm pack --prefix ..
-npm install ../slipstream-topwise-sdk-0.1.0.tgz effect text-encoding-polyfill
+npm install ../slipstream-topwise-sdk-0.1.0.tgz
 
 npx react-native run-android
 ```
 
-`index.js` imports `text-encoding-polyfill` first — Hermes has no
-`TextEncoder`/`TextDecoder` and the SDK's internals need them.
+One package, nothing else. Effect and the `TextEncoder`/`TextDecoder` polyfill
+Hermes lacks arrive with the SDK, which loads the polyfill itself — there is
+no setup line in `index.js`.
 
 Autolinking picks up the package's `android/` module; there is no
 `MainApplication.kt` edit. See [`../example/README.md`](../example/README.md)

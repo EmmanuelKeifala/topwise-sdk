@@ -19,17 +19,15 @@ they hold a live `Context` or `View` — are mirrored by hand instead; see
 ## Install
 
 ```sh
-npm install @slipstream/topwise-sdk effect text-encoding-polyfill
+npm install @slipstream/topwise-sdk
 ```
 
-Effect's internals use `TextEncoder`/`TextDecoder`, which Hermes does not
-implement. Import the polyfill **before** anything that pulls in Effect —
-which includes this SDK — or the bundle throws at module-load time:
+That is the whole install. Effect and the `TextEncoder`/`TextDecoder` polyfill
+Hermes lacks come with it, and the SDK loads the polyfill itself before Effect
+touches it — there is no setup line to remember. `react-native` stays a peer
+dependency, since your app already owns it.
 
-```js
-// index.js, first line
-import "text-encoding-polyfill";
-```
+Add `effect` to your own dependencies only if *your* code imports it.
 
 Then register the native package in `MainApplication.kt`:
 
@@ -122,8 +120,9 @@ Failures are thrown, not returned, so ordinary `try`/`catch` works — and what
 you catch is the same `TopwiseError`, with its `code`, `module` and `method`
 intact.
 
-`effect` still has to be installed (it is what the SDK runs on), you just never
-import it. See [`example-plain/`](./example-plain) for a working app.
+Effect is still what the SDK runs on underneath, but it arrives with the
+install and you never import it. See [`example-plain/`](./example-plain) for a
+working app.
 
 ### Shapes you will meet
 
